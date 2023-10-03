@@ -28,6 +28,17 @@ start-docker:
 	docker start ${DB_DOCKER_CONTAINER}
 
 
+create_migrations:
+	sqlx migrate add -r init
+
+migrate-up:
+	sqlx migrate run --database-url "postgres://root:secret@localhost:5432/coffedb?sslmode=disable"
+
+migrate-down:
+	sqlx migrate revert --database-url "postgres://root:secret@localhost:5432/coffedb?sslmode=disable"
+
+
+
 build:
 	@echo "Building backend api binary"
 	go build -o ${BINARY_NAME} cmd/server/*.go
