@@ -1,3 +1,5 @@
+DSN="host=localhost port=5432 user=root password=secret dbname=coffedb sslmode=disable timezone=UTC connect_timeout=5"
+PORT=8080
 DB_DOCKER_CONTAINER=coffee_db
 BINARY_NAME=coffeapi
 
@@ -46,5 +48,19 @@ build:
 	@echo "Binary built!"
 
 
-run:
-	go run cmd/server/main.go
+run: build stop_containers start-docker
+	@echo "Startin api"
+	@env PORT=${PORT} DSN=${DSN} ./${BINARY_NAME} &
+	@echo "api started!"
+
+
+stop:
+	@echo "Stopping backend"
+	@-pkill -SIGTERM -f "./${BINARY_NAME}"
+	@echo "Stopped backend"
+
+
+start: run
+
+
+restart: stop start
