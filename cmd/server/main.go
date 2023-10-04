@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"go-chi-template/db"
+	"go-chi-template/router"
 	"go-chi-template/services"
 	"log"
 	"net/http"
@@ -25,6 +26,7 @@ func (app *Application) Serve() error {
 
 	srv := &http.Server{
 		Addr: fmt.Sprintf(":%s", port),
+		Handler: router.Routes(),
 	}
 
 	return srv.ListenAndServe()
